@@ -1,0 +1,24 @@
+<div class="body">
+    <header>
+        <h1>ChatSignalR</h1>
+    </header>
+    <main>
+        @for (item of messages(); track $index) {
+            <div [className]="item.author == 'Eu' ? 'chat-body' : 'chat-body chat-body-other'">
+                <div [className]="item.author == 'Eu' ? 'chat' : 'chat chat-other'">
+                    @if (item.author != "Eu") {
+                        <p class="name">{{item.author}}</p>
+                    }
+                    <p style="user-select: all;">{{item.text}}</p>
+                    <p class="date">{{item.date.toLocaleDateString()}}</p>
+                </div>
+            </div>
+        }
+    </main>
+    <footer>
+        <mat-form-field style="width: 100dvw; margin-left: 20px;" appearance="outline">
+            <textarea matInput placeholder="Insira sua mensagem" [rows]="1"></textarea>
+        </mat-form-field>
+        <mat-icon class="send" fontIcon="send"/>
+    </footer>
+</div>

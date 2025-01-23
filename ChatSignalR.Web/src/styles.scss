@@ -2,3 +2,27 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+  }  
+
+:root {
+    --primaryColor: #2464a4;
+    --secondaryColor: #d8e3ff;
+    --thirdColor: #98d9ff;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-top-left-radius: 10px;
+    background-color: var(--secondaryColor);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-top-left-radius: 10px;
+    background-color: var(--primaryColor);
+  }
