@@ -2,8 +2,8 @@
     <header>
         <h1>ChatSignalR</h1>
     </header>
-    <main>
-        @for (item of messages(); track $index) {
+    <main #main >
+        @for (item of messages; track $index) {
             <div [className]="item.user.id == user?.id ? 'chat-body' : 'chat-body chat-body-other'">
                 <div [className]="item.user.id == user?.id  ? 'chat' : 'chat chat-other'">
                     @if (item.user.id != user?.id ) {

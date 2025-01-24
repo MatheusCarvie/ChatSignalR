@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
 import IMessage from "../app/models/message";
+import Swal from "sweetalert2";
 
 @Injectable({providedIn: "root"})
 export default class SignalRService {
@@ -13,8 +14,24 @@ export default class SignalRService {
         .build();
 
         this.hubConnection.start()
-        .then(() => console.log("Conectado ao ChatHub"))
-        .catch(()=> console.error("Falha ao se conectar ao ChatHub"))
+        .then(() => {
+            const toastMin = Swal.mixin({
+                position: "top-right",
+                toast: true,
+                showConfirmButton: false,
+                timer: 3000,
+            });
+            toastMin.fire({icon: "success", title: "Conectado ao ChatHub"});
+        })
+        .catch(()=> {
+            Swal.fire({
+                title: "Error",
+                text: "Falha ao se conectar ao ChatHub",
+                icon: "error",
+                draggable: false,
+                showConfirmButton: false,
+            });
+        })
     }
 
     addMessageLister(callback: (message: IMessage) => void) {
@@ -22,6 +39,14 @@ export default class SignalRService {
     }
 
     sendMessage(message: IMessage) {
-        this.hubConnection?.invoke("SendMessage", message).catch(() => console.error("Falha ao tentar enviar a mensagem"));
+        this.hubConnection?.invoke("SendMessage", message).catch(() => {
+            const toastMin = Swal.mixin({
+                position: "bottom-right",
+                toast: true,
+                showConfirmButton: false,
+                timer: 3000,
+            });
+            toastMin.fire({icon: "error", title: "Falha ao tentar enviar a mensagem"});
+        });
     }
 }

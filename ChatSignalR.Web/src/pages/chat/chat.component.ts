@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { AfterViewChecked, Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import IMessage from "../../app/models/message";
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from "@angular/material/icon";
@@ -14,13 +14,19 @@ import IUser from "../../app/models/user";
     styleUrl: "./chat.component.scss"
 })
 
-export default class ChatComponent implements OnInit {
+export default class ChatComponent implements OnInit, AfterViewChecked {
+    @ViewChild("main") mainElement!: ElementRef<HTMLDivElement>;
+
     signalRService = inject(SignalRService);
     userService = inject(UserService);
 
     user?: IUser;
     message: string = "";
-    messages = signal<IMessage[]>([]);
+    messages: IMessage[] = [];
+
+    ngAfterViewChecked(): void {
+        this.scrollToBottom();
+    }
 
     ngOnInit(): void {
         this.userService.generateUser();
@@ -28,10 +34,14 @@ export default class ChatComponent implements OnInit {
 
         this.signalRService.StartConnection();
         this.signalRService.addMessageLister((message) => {
-            let tempList = this.messages();
-            tempList.push(message); 
-            this.messages.set(tempList);
+            this.messages.push(message);
+            this.messages.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         });
+    }
+
+    private scrollToBottom() {
+        const element = this.mainElement.nativeElement;
+        element.scrollTop = element.scrollHeight;
     }
 
     sendMessage(){
@@ -41,6 +51,8 @@ export default class ChatComponent implements OnInit {
 
     getDate(date: Date){
         const newDate = new Date(date);
-        return newDate.toLocaleDateString();
+        const hours = String(newDate.getHours()).padStart(2, "0");
+        const minutes = String(newDate.getMinutes()).padStart(2, "0");
+        return `${newDate.toLocaleDateString()} - ${hours}:${minutes}h`;
     }
 }

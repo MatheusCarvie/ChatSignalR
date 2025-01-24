@@ -38,6 +38,7 @@
 
             textarea {
                 resize: none;
+                overflow: hidden;
             }
 
             ::ng-deep .mdc-text-field--filled{
