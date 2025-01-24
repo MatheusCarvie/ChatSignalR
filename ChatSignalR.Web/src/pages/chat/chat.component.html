@@ -4,10 +4,10 @@
     </header>
     <main>
         @for (item of messages(); track $index) {
-            <div [className]="item.author == user ? 'chat-body' : 'chat-body chat-body-other'">
-                <div [className]="item.author == user ? 'chat' : 'chat chat-other'">
-                    @if (item.author != user) {
-                        <p class="name">{{item.author}}</p>
+            <div [className]="item.user.id == user?.id ? 'chat-body' : 'chat-body chat-body-other'">
+                <div [className]="item.user.id == user?.id  ? 'chat' : 'chat chat-other'">
+                    @if (item.user.id != user?.id ) {
+                        <p class="name">{{item.user.name}}</p>
                     }
                     <p style="user-select: all;">{{item.text}}</p>
                     <p class="date">{{getDate(item.date)}}</p>

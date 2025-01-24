@@ -5,6 +5,7 @@ import {MatIconModule} from "@angular/material/icon";
 import SignalRService from "../../services/signalR.service";
 import { FormsModule } from "@angular/forms";
 import UserService from "../../services/user.service";
+import IUser from "../../app/models/user";
 
 @Component({
     selector: "app-chat",
@@ -17,11 +18,12 @@ export default class ChatComponent implements OnInit {
     signalRService = inject(SignalRService);
     userService = inject(UserService);
 
-    user?: string;
+    user?: IUser;
     message: string = "";
     messages = signal<IMessage[]>([]);
 
     ngOnInit(): void {
+        this.userService.generateUser();
         this.userService.user.subscribe(e => this.user = e);
 
         this.signalRService.StartConnection();
@@ -33,7 +35,7 @@ export default class ChatComponent implements OnInit {
     }
 
     sendMessage(){
-        this.signalRService.sendMessage({author: this.user!, text: this.message!, date: new Date()});
+        this.signalRService.sendMessage({user: this.user!, text: this.message!, date: new Date()});
         this.message = "";
     }
 
