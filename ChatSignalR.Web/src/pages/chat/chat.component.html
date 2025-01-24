@@ -4,21 +4,23 @@
     </header>
     <main>
         @for (item of messages(); track $index) {
-            <div [className]="item.author == 'Eu' ? 'chat-body' : 'chat-body chat-body-other'">
-                <div [className]="item.author == 'Eu' ? 'chat' : 'chat chat-other'">
-                    @if (item.author != "Eu") {
+            <div [className]="item.author == user ? 'chat-body' : 'chat-body chat-body-other'">
+                <div [className]="item.author == user ? 'chat' : 'chat chat-other'">
+                    @if (item.author != user) {
                         <p class="name">{{item.author}}</p>
                     }
                     <p style="user-select: all;">{{item.text}}</p>
-                    <p class="date">{{item.date.toLocaleDateString()}}</p>
+                    <p class="date">{{getDate(item.date)}}</p>
                 </div>
             </div>
         }
     </main>
     <footer>
-        <mat-form-field style="width: 100dvw; margin-left: 20px;" appearance="outline">
-            <textarea matInput placeholder="Insira sua mensagem" [rows]="1"></textarea>
+        <mat-form-field class="message">
+            <textarea matInput placeholder="Insira sua mensagem" [rows]="1" [(ngModel)]="message"></textarea>
         </mat-form-field>
-        <mat-icon class="send" fontIcon="send"/>
+        <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="message === ''">
+            <mat-icon class="send" fontIcon="send"/>
+        </button>
     </footer>
 </div>
